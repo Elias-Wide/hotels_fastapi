@@ -1,0 +1,98 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hotels_fastapi"
+version = "0.0.1"
+authors = [
+    {name = "Elias-Wide", email = "ilshi2904@gmail.com"},
+]
+description = ""
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">=3.10, <3.11"
+dependencies = [
+    "aiogram==3.4.1",
+    "alembic==1.13.1",
+    "aiosqlite==0.20.0",
+    "aioschedule==0.5.2",
+    "APScheduler==3.10.4",
+    "fastapi==0.110.0",
+    "FastAPI-SQLAlchemy==0.2.1",
+    "gunicorn==22.0.0",
+    "uvicorn[standard]==0.17.6",
+    "pydantic-settings==2.2.1",
+    "sqladmin==0.16.1",
+    "fastapi-storages==0.3.0",
+    "fastapi_scheduler==0.0.15",
+    "fastapi-users-db-sqlalchemy==6.0.1",
+    "SQLAlchemy-Utils==0.41.2",
+    "itsdangerous==2.1.2",
+    "timezonefinder==6.5.1",
+    "pytz==2024.1",
+    "types-pytz==2024.1.0.20240417",
+]
+
+[tool.black]
+extend-exclude = "alembic/*"
+line-length = 79
+skip-string-normalization = "true"
+
+[tool.flake8]
+extend-exclude = [
+    "tests/",
+    "venv/",
+    "env/"
+]
+ignore = [
+    "ANN101",
+    "ANN102",
+    "D100",
+    "D101",
+    "D102",
+    "D103",
+    "D104",
+    "D105",
+    "D106",
+    "D107",
+    "W503",
+]
+extend-ignore = [
+    "E401",
+    "ANN401",
+]
+max-complexity = 10
+max-line-length = 79
+per-file-ignores = [
+    "__init__.py:F401",
+    "db.py:N805", 
+]
+
+[tool.isort]
+profile = "black"
+line_length = 79
+src_paths = "app"
+extend_skip = ["alembic"]
+
+[tool.mypy]
+python_version = "3.10"
+check_untyped_defs = true
+disallow_untyped_calls = true
+disallow_untyped_decorators = true
+ignore_errors = false
+ignore_missing_imports = true
+implicit_reexport = false
+strict_optional = true
+strict_equality = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unreachable = true
+warn_no_return = true
+disable_error_code = [
+    "attr-defined",
+    "call-overload",
+    "var-annotated",
+]
