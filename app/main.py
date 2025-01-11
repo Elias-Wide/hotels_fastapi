@@ -8,7 +8,7 @@ app = FastAPI()
 
 
 class SBooking(BaseModel):
-    room_id: int 
+    room_id: int
     date_from: date
     date_to: date
 
@@ -17,6 +17,7 @@ class SHotel(BaseModel):
     addres: str
     name: str
     stars: int
+
 
 @app.get("/hotels")
 def get_hotels(
@@ -32,4 +33,4 @@ def get_hotels(
 
 @app.post("/bookings")
 def add_booking(booking: SBooking):
-    
+    pass
