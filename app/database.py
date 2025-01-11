@@ -1,19 +1,23 @@
+from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
+from app.config import settings
 
-DB_HOST = "localhost"
-DB_PORT = 5432
-DB_USER = "postgres"
-DB_NAME = "postgres"
-DB_PASSWORD = "postgres"
+class PreBase:
+    """Родительский класс для базового."""
 
-DB_URL = f"postgresql+asyncpg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    @declared_attr
+    def __tablename__(cls) -> str:
+        """Возвращает имя для таблицы в нижнем регистре."""
+        return cls.__name__.lower()
 
-engine = create_async_engine(DB_URL)
+    id = Column(Integer, primary_key=True)
+
+
+engine = create_async_engine(settings.DB_URL)
 
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-class Base(DeclarativeBase):
-    pass
+Base = DeclarativeBase(cls=PreBase)
