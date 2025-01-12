@@ -1,8 +1,9 @@
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+from sqlalchemy.orm import DeclarativeBase, declared_attr, sessionmaker
 
 from app.config import settings
+
 
 class PreBase:
     """Родительский класс для базового."""
@@ -20,4 +21,5 @@ engine = create_async_engine(settings.DB_URL)
 async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-Base = DeclarativeBase(cls=PreBase)
+class Base(DeclarativeBase, PreBase):
+    pass
