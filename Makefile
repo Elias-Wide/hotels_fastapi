@@ -3,4 +3,4 @@ WORKDIR = app
 
 all:
 	black $(WORKDIR)
-	uvicorn app.main:app --reload --port 8000
+	uvicorn app.main:app --port 8000
