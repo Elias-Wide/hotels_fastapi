@@ -4,15 +4,11 @@ from typing import Optional
 
 from pydantic import BaseModel
 from app.bookings.router import router as router_bookings
+from app.users.router import router as router_users
 
 app = FastAPI()
+app.include_router(router_users)
 app.include_router(router_bookings)
-
-
-class SBooking(BaseModel):
-    room_id: int
-    date_from: date
-    date_to: date
 
 
 class SHotel(BaseModel):
@@ -31,8 +27,3 @@ def get_hotels(
     has_spa: Optional[bool] = None,
 ) -> list[SHotel]:
     return date_to, date_from
-
-
-@app.post("/bookings")
-def add_booking(booking: SBooking):
-    pass
