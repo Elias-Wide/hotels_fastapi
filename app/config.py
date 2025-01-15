@@ -1,4 +1,5 @@
 from typing import Optional
+
 from pydantic import Field, ValidationInfo, field_validator
 from pydantic_settings import BaseSettings
 
@@ -10,7 +11,7 @@ class Settings(BaseSettings):
     DB_NAME: str
     DB_PASSWORD: str
     DB_URL: Optional[str] = Field(default=None)
-    AUTH_KEY: str
+    SECRET_KEY: str
     ENCODE_ALGORITHM: str
 
     @field_validator("DB_URL", mode="before")
