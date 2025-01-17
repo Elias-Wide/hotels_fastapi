@@ -64,5 +64,4 @@ async def get_user_id_from_token(token: str) -> bool:
     user_id = payload.get("sub")
     if not user_id:
         raise TokenException("error")
-    print(user_id, type(user_id))
     return int(user_id)
