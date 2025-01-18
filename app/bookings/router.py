@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends, Request
 from sqlalchemy import select
 
 from app.bookings.dao import BookingsDAO
+from app.bookings.exceptions import RoomCantBeBooked
 from app.bookings.models import Bookings
 from app.bookings.schemas import SBooking
 from app.dao.base import BaseDAO
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/bookings", tags=["Бронирование"])
 async def get_bookings(
     user: Users = Depends(get_current_user),
 ) -> list[SBooking]:
-    return await BookingsDAO.find_all(user_id=user.id)
+    return await BookingsDAO.get_bookings_by_user(user.id)
 
 
 @router.post("")
@@ -27,10 +28,6 @@ async def add_booking(
     date_to: date,
     user: Users = Depends(get_current_user),
 ):
-    print(user.id, type(user.id), '!!!!!!!!!!!!!!!!11')
-    await BookingsDAO.add(
-        user.id,
-        room_id,
-        date_from,
-        date_to,
-    )
+    booking = await BookingsDAO.add(user.id, room_id, date_from, date_to)
+    if not booking:
+        raise RoomCantBeBooked()

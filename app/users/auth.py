@@ -22,9 +22,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def authenticate_user(
-    email: EmailStr, password: str
-) -> Optional[None | Users]:
+async def authenticate_user(email: EmailStr, password: str) -> Optional[None | Users]:
     user = await UsersDAO.get_one_or_none(email=email)
     if not user:
         return None
@@ -37,17 +35,13 @@ def create_acces_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.now() + timedelta(minutes=30)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, settings.ENCODE_ALGORITHM
-    )
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, settings.ENCODE_ALGORITHM)
     return encoded_jwt
 
 
 async def get_user_id_from_token(token: str) -> bool:
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM
-        )
+        payload = jwt.decode(token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM)
     except JWTError:
         raise TokenException("error")
         # raise HTTPException(

@@ -21,9 +21,7 @@ async def register(user_data: SUserCreate):
     if user_exist:
         raise UserExistException()
     hashed_password = get_password_hash(user_data.password)
-    await UsersDAO.add_object(
-        email=user_data.email, hashed_password=hashed_password
-    )
+    await UsersDAO.add_object(email=user_data.email, hashed_password=hashed_password)
 
 
 @router.post("/login")
