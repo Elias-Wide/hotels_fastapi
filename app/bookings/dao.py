@@ -4,15 +4,17 @@ from sqlalchemy import and_, func, insert, or_, select, text
 from app.bookings.models import Bookings
 from app.dao.base import BaseDAO
 from app.database import async_session_maker, engine
-from app.rooms.dao import RoomsDAO
-from app.rooms.models import Rooms
+from app.hotels.rooms.dao import RoomsDAO
+from app.hotels.rooms.models import Rooms
 
 
 class BookingsDAO(BaseDAO):
     model = Bookings
 
     @classmethod
-    async def add(cls, user_id: int, room_id: int, date_from: date, date_to: date):
+    async def add(
+        cls, user_id: int, room_id: int, date_from: date, date_to: date
+    ):
         async with async_session_maker() as session:
             booked_rooms = select(Bookings).where(
                 and_(
@@ -55,11 +57,11 @@ class BookingsDAO(BaseDAO):
                 return None
 
     @classmethod
-    async def get_bookings_by_user(cls, user_id) -> list[Bookings]:
+    async def get_bookings_by_user(cls, user_id):
         async with async_session_maker() as session:
-            bookings = await session.execute(
-                select(Bookings)
-                .order_by(Bookings.date_from)
+            get_user_bookings = await session.execute(
+                select(Bookings, Rooms)
+                .join(Rooms, Bookings.room_id == Rooms.id, isouter=True)
                 .where(Bookings.user_id == user_id)
             )
-        return bookings.scalars().all()
+        return get_user_bookings.scalars().all()
