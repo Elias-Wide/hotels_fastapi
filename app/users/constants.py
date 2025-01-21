@@ -1,4 +1,1 @@
-USER_ROLE = (
-    ('ADMIN', 'Админ'),
-    ('USER', 'Пользователь'),
-)
+USER_ROLE = [("admin", "Admin"), ("regular_user", "Regular user")]

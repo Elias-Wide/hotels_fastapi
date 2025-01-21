@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from sqlalchemy import and_, func, insert, or_, select, text
 from app.bookings.models import Bookings
@@ -60,8 +60,20 @@ class BookingsDAO(BaseDAO):
     async def get_bookings_by_user(cls, user_id):
         async with async_session_maker() as session:
             get_user_bookings = await session.execute(
-                select(Bookings, Rooms)
+                select(Bookings.__table__.columns, Rooms.__table__.columns)
                 .join(Rooms, Bookings.room_id == Rooms.id, isouter=True)
                 .where(Bookings.user_id == user_id)
             )
-        return get_user_bookings.scalars().all()
+        return get_user_bookings.mappings().all()
+
+    @classmethod
+    async def get_all_bookings(cls):
+        async with async_session_maker() as session:
+            current_date = datetime.now().date()
+            get_bookings = await session.execute(
+                select(Bookings.__table__.columns, Rooms.__table__.columns)
+                .filter(Bookings.date_from > current_date)
+                .join(Rooms, Bookings.room_id == Rooms.id, isouter=True)
+                .order_by("date_from")
+            )
+        return get_bookings.mappings().all()

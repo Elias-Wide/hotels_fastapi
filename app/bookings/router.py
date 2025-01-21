@@ -1,6 +1,5 @@
 from datetime import date
 from fastapi import APIRouter, Depends
-from sqlalchemy import select
 
 from app.bookings.dao import BookingsDAO
 from app.bookings.exceptions import RoomCantBeBooked
@@ -21,12 +20,13 @@ async def get_bookings(
 
 
 @router.get("/all")
-async def get_bookings(
+async def get_all_bookings(
     user: Users = Depends(get_current_user),
 ) -> list[SBookingGet]:
     if not is_admin(user):
         raise AccessDeniedException()
-    return await BookingsDAO.find_all()
+    return await BookingsDAO.get_all_bookings()
+
 
 @router.post("")
 async def add_booking(
