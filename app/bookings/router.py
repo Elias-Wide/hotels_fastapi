@@ -6,7 +6,9 @@ from app.bookings.dao import BookingsDAO
 from app.bookings.exceptions import RoomCantBeBooked
 from app.bookings.schemas import SBooking, SBookingGet
 from app.users.dependencies import get_current_user
+from app.users.exceptions import AccessDeniedException
 from app.users.models import Users
+from app.users.permissions import is_admin
 
 router = APIRouter(prefix="/bookings", tags=["Бронирование"])
 
@@ -17,6 +19,14 @@ async def get_bookings(
 ) -> list[SBookingGet]:
     return await BookingsDAO.get_bookings_by_user(user.id)
 
+
+@router.get("/all")
+async def get_bookings(
+    user: Users = Depends(get_current_user),
+) -> list[SBookingGet]:
+    if not is_admin(user):
+        raise AccessDeniedException()
+    return await BookingsDAO.find_all()
 
 @router.post("")
 async def add_booking(

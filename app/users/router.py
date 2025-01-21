@@ -4,7 +4,7 @@ from app.users.auth import (
     authenticate_user,
     create_acces_token,
     get_password_hash,
-    verify_password,
+
 )
 from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user
