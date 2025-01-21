@@ -50,17 +50,9 @@ async def get_user_id_from_token(token: str) -> bool:
         )
     except JWTError:
         raise TokenException("error")
-        # raise HTTPException(
-        #     status_code=status.HTTP_401_UNAUTHORIZED,
-        #     detail={'token_error': 'Неправильный токен авторизации!'}
-        # )
     expire = payload.get("exp")
     if (not expire) or (int(expire)) < datetime.now().timestamp():
         raise TokenException("expired")
-        # raise HTTPException(
-        #     status_code=status.HTTP_401_UNAUTHORIZED,
-        #     detail={'token_expired': 'Токен недействителен!'}
-        # )
     user_id = payload.get("sub")
     if not user_id:
         raise TokenException("error")
