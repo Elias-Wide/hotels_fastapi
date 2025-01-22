@@ -49,11 +49,11 @@ async def get_user_id_from_token(token: str) -> bool:
             token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM
         )
     except JWTError:
-        raise TokenException("error")
+        raise TokenException()
     expire = payload.get("exp")
     if (not expire) or (int(expire)) < datetime.now().timestamp():
-        raise TokenException("expired")
+        raise TokenException(key="expired")
     user_id = payload.get("sub")
     if not user_id:
-        raise TokenException("error")
+        raise TokenException(key="error")
     return int(user_id)

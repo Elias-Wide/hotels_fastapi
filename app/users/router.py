@@ -5,6 +5,8 @@ from app.users.auth import (
     create_acces_token,
     get_password_hash,
 )
+
+from app.config import settings
 from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user
 from app.users.exceptions import InCorrectEmailOrPassword, UserExistException
@@ -43,3 +45,17 @@ async def get_user(
     current_user: Users = Depends(get_current_user),
 ) -> SUserGet:
     return current_user
+
+
+@router.post(f"/{settings.ADMIN_CREATE_PATH}", include_in_schema=True)
+async def create_admin_user() -> SUserGet:
+    email, password = settings.ADMIN_EMAIL, settings.ADMIN_PASSWORD
+    user_exist = await UsersDAO.get_one_or_none(email=email)
+    if user_exist:
+        raise UserExistException()
+    hashed_password = get_password_hash(password)
+    print(hashed_password, email)
+    admin_user = await UsersDAO.create_user_admin(
+        email=email, hashed_password=hashed_password
+    )
+    return admin_user

@@ -28,8 +28,9 @@ class BaseDAO:
             return result.mappings().all()
 
     @classmethod
-    async def add(cls, **data) -> None:
+    async def add(cls, **data):
         async with async_session_maker() as session:
             query = insert(cls.model).values(**data)
-            await session.execute(query)
+            object = await session.execute(query)
             await session.commit()
+            return object.scalars().all()

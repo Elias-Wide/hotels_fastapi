@@ -13,6 +13,9 @@ class Settings(BaseSettings):
     DB_URL: Optional[str] = Field(default=None)
     SECRET_KEY: str
     ENCODE_ALGORITHM: str
+    ADMIN_CREATE_PATH: str
+    ADMIN_EMAIL: str
+    ADMIN_PASSWORD: str
 
     @field_validator("DB_URL", mode="before")
     @classmethod
