@@ -23,8 +23,7 @@ async def get_bookings(
 async def get_all_bookings(
     user: Users = Depends(get_current_user),
 ) -> list[SBookingGet]:
-    if not is_admin(user):
-        raise AccessDeniedException()
+    is_admin(user)
     return await BookingsDAO.get_all_bookings()
 
 

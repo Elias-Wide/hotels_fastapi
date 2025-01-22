@@ -6,6 +6,7 @@ from app.users.exceptions import TokenException
 
 
 async def get_token(request: Request):
+    """Получить Токен."""
     token = request.cookies.get("user_access_token")
     if not token:
         raise TokenException("error")
@@ -13,6 +14,7 @@ async def get_token(request: Request):
 
 
 async def get_current_user(token: str = Depends(get_token)):
+    """Получить текущего авторизованного пользователя."""
     user_id = await get_user_id_from_token(token)
     user = await UsersDAO.get_by_id(user_id)
     return user

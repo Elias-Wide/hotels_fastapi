@@ -10,6 +10,7 @@ class UsersDAO(BaseDAO):
 
     @classmethod
     async def create_user_admin(cls, email: str, hashed_password: str):
+        """Создание профиля админа."""
         async with async_session_maker() as session:
             query = (
                 insert(cls.model)

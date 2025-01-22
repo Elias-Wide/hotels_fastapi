@@ -8,7 +8,7 @@ from pydantic import EmailStr
 
 from app.config import settings
 from app.users.dao import UsersDAO
-from app.users.exceptions import TokenException
+from app.users.exceptions import TokenException, TokenExpiredException
 from app.users.models import Users
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -44,6 +44,7 @@ def create_acces_token(data: dict) -> str:
 
 
 async def get_user_id_from_token(token: str) -> bool:
+    """Получить id пользователя из токена."""
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, settings.ENCODE_ALGORITHM
@@ -52,8 +53,8 @@ async def get_user_id_from_token(token: str) -> bool:
         raise TokenException()
     expire = payload.get("exp")
     if (not expire) or (int(expire)) < datetime.now().timestamp():
-        raise TokenException(key="expired")
+        raise TokenExpiredException()
     user_id = payload.get("sub")
     if not user_id:
-        raise TokenException(key="error")
+        raise TokenException()
     return int(user_id)

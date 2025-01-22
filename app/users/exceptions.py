@@ -19,18 +19,10 @@ class TokenException(BaseBookingException):
     status_code = status.HTTP_409_CONFLICT
     detail = {"auth_error": "Неверный токен!"}
 
-    def __init__(self):
-        super().__init__(status_code=self.status_code, detail=self.detail)
-
 
 class TokenExpiredException(BaseBookingException):
     status_code = status.HTTP_409_CONFLICT
-    detail = {
-        "expired": "Токен недействителен! Необходимо обновить токен",
-    }
-
-    def __init__(self):
-        super().__init__(status_code=self.status_code, detail=self.detail)
+    detail = {"expired": "Токен недействителен! Необходимо обновить токен"}
 
 
 class AccessDeniedException(BaseBookingException):
