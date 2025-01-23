@@ -1,0 +1,39 @@
+.hotel-card {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    margin-left: 100px;
+    display: flex;
+    align-items: center;
+}
+
+
+.hotel-card img {
+    width: 250px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15%;
+    margin-right: 15px;
+}
+
+
+.hotel-card .details {
+    flex-grow: 1;
+}
+
+
+.hotel-card a {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+
+.hotel-card a:hover {
+    background-color: #0056b3;
+}
